@@ -29,7 +29,7 @@ void detectBrainTumors(const Eigen::MatrixXf& mriImage, Eigen::MatrixXf& tumorCo
 
 int main() {
     // Load MRI image from file
-    cv::Mat mriImageMat = cv::imread("path/to/your/mri/image.jpg", cv::IMREAD_GRAYSCALE);
+    cv::Mat mriImageMat = cv::imread("image.jpg", cv::IMREAD_GRAYSCALE);
     
     // Convert OpenCV matrix to Eigen matrix
     Eigen::MatrixXf mriImage = Eigen::MatrixXf::Map(mriImageMat.ptr<float>(), mriImageMat.rows, mriImageMat.cols);
