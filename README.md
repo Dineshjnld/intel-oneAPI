@@ -19,6 +19,8 @@ Classification: The extracted features are used as input to a classification mod
 Post-processing and Visualization: SYCL and oneAPI libraries are employed for post-processing steps, such as removing false positives, applying morphological operations, or additional filtering. The final tumor regions can be visualized using tools like OpenCV or other visualization libraries available in the oneAPI ecosystem.
 
 The utilization of Intel oneAPI and SYCL libraries in this prototype allows for efficient utilization of heterogeneous systems, such as CPUs and GPUs, to accelerate the processing of medical images. It harnesses the parallelism capabilities provided by SYCL to enhance performance, scalability, and accuracy in brain tumor detection.
+![image](https://github.com/Dineshjnld/intel-oneAPI/assets/106725225/056dd86d-ea95-4b8b-81d5-9c322c284060)
+
 ## Tech Stack: 
    implementation of brain tumor detection from MRI images using the tech stack mentioned. Here's a breakdown of the code:
 
