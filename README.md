@@ -6,60 +6,52 @@
                          
 
 ## A Brief of the Prototype:
-The brain tumor detection system prototype leverages Intel oneAPI and SYCL libraries to accelerate the processing of MRI images and improve performance. It follows a similar pipeline as described earlier but incorporates the parallelism capabilities of SYCL to enhance efficiency.
+The DPC++ model is designed for brain tumor detection using deep learning techniques. Here's a brief overview of the model:
 
-Preprocessing: The prototype uses Intel oneAPI and SYCL libraries to perform preprocessing tasks, such as noise removal, intensity normalization, and resizing, on the MRI images. SYCL parallelism enables efficient execution of these tasks on heterogeneous systems, leveraging the power of CPUs and GPUs.
+-->Load the TensorFlow Model: The code starts by loading a pre-trained TensorFlow model from a .pb file. The model is assumed to have been trained on a large dataset for brain tumor detection.
 
-Image Segmentation: SYCL is employed to implement image segmentation algorithms, such as thresholding, region-growing, or advanced techniques like watershed or active contour models. The parallel execution capabilities of SYCL allow for efficient segmentation of the tumor region in the MRI images.
+-->Selecting an Image: The code selects a random image from a specified folder containing brain images. This image will be used for inference.
 
-Feature Extraction: SYCL and oneAPI libraries, including Eigen and ArrayFire, are utilized for accelerated feature extraction from the segmented tumor regions. These libraries provide GPU acceleration and optimized linear algebra operations to efficiently compute various features that characterize the tumor.
+-->Benchmarking Variables: The code initializes variables for benchmarking, including the number of processed images and the total latency.
 
-Classification: The extracted features are used as input to a classification model implemented using oneAPI and SYCL libraries, such as oneAPIDNN, Eigen, or ArrayFire, to perform tumor classification. These libraries offer optimized deep learning algorithms or linear algebra operations to improve the accuracy and speed of the classification task.
+-->Image Preprocessing: The selected image is loaded using OpenCV and preprocessed. It is converted to grayscale and resized to match the input size expected by the model.
 
-Post-processing and Visualization: SYCL and oneAPI libraries are employed for post-processing steps, such as removing false positives, applying morphological operations, or additional filtering. The final tumor regions can be visualized using tools like OpenCV or other visualization libraries available in the oneAPI ecosystem.
+-->Creating the Input Tensor: A TensorFlow input tensor is created with the appropriate shape and data type. The preprocessed image data is then copied to the input tensor.
 
-The utilization of Intel oneAPI and SYCL libraries in this prototype allows for efficient utilization of heterogeneous systems, such as CPUs and GPUs, to accelerate the processing of medical images. It harnesses the parallelism capabilities provided by SYCL to enhance performance, scalability, and accuracy in brain tumor detection.
-![image](https://github.com/Dineshjnld/intel-oneAPI/assets/106725225/056dd86d-ea95-4b8b-81d5-9c322c284060)
+-->Inference with DPC++: The DPC++ code executes the TensorFlow session to perform inference on the input tensor. The output tensor containing the tumor detection results is obtained.
+
+-->Latency Calculation: The code measures the latency for the current image by capturing the start and end times of the inference process. The total latency is accumulated for all processed images.
+
+-->Tumor Detection Interpretation: The output tensor is interpreted to determine the presence of a tumor. A threshold (e.g., 0.5) is applied to the tumor score, and if it exceeds the threshold, it is considered that the brain image contains a tumor.
+
+-->Printing Results: The code prints the selected image path, whether a tumor is detected or not, and the benchmarking measures for the selected image.
+
+-->Clean Up: The TensorFlow session is closed and resources are cleaned up.
+
+![image](https://github.com/Dineshjnld/intel-oneAPI/assets/106725225/4c104756-12d7-4ecf-8e3f-e5f6ece34171)
 
 ## Tech Stack: 
    implementation of brain tumor detection from MRI images using the tech stack mentioned. Here's a breakdown of the code:
+Programming Languages:
+Python: The Python programming language is used for the Python implementation of the brain tumor detection model.
+DPC++: DPC++ (Data Parallel C++) is used for the DPC++ implementation, which leverages SYCL for heterogeneous programming and parallel execution on hardware accelerators.
+Libraries and Frameworks:
 
-Include necessary libraries:
+TensorFlow: The TensorFlow library is utilized for loading the pre-trained model and performing inference in both the Python and DPC++ implementations.
+OpenCV: The OpenCV library is used for image loading, preprocessing, and resizing in the Python implementation.
+CL/sycl: The CL/sycl library is used for programming with DPC++ and executing computations on heterogeneous hardware platforms.
 
-iostream for input/output operations.
-Eigen/Dense for linear algebra operations.
-CL/sycl.hpp for SYCL programming.
-opencv2/opencv.hpp for image loading and manipulation with OpenCV.
-Define the namespace sycl to simplify SYCL-related code.
-
-Implement the detectBrainTumors function:
-
-This function takes an input MRI image represented as an Eigen matrix (mriImage) and outputs a tumor confirmed matrix (tumorConfirmed).
-The placeholder implementation performs a simple thresholding operation, setting pixel values above 0.5 to 1 and others to 0.
-Implement the main function:
-
-Load the MRI image from file using OpenCV's imread function.
-Convert the OpenCV matrix to an Eigen matrix using Eigen::MatrixXf::Map.
-Create an empty matrix for the tumor confirmation results (tumorConfirmed).
-Create a SYCL queue (myQueue) for device selection.
-Create SYCL buffers for data transfer between host and device, using sycl::buffer.
-Submit a SYCL kernel for execution on the device using myQueue.submit.
-Access the SYCL buffers using get_access to perform the tumor detection algorithm in parallel.
-Wait for the kernel to finish execution using myQueue.wait.
-Copy the results back to the host using sycl::host_accessor.
-Print the tumor confirmed matrix for verification.
+Overall, the tech stack includes Python, TensorFlow, OpenCV, and CL/sycl for implementing and executing the brain tumor detection model in both Python and DPC++.
 ## Step-by-Step Code Execution Instructions:
+To clone and run the brain tumor detection prototype, follow these step-by-step instructions:
+
 To clone and run the brain tumor detection prototype, follow these step-by-step instructions:
 
 Clone the Repository:
 
-Open a terminal or command prompt.
-
+Open a command prompt or terminal.
 Navigate to the directory where you want to clone the repository.
-
 Run the following command to clone the repository:
-git clone https://github.com/Dineshjnld/intel-oneAPI
-Install the Required Libraries:
 
 Ensure that you have the necessary libraries installed, including Eigen, OpenCV, and the SYCL implementation such as Intel's DPC++ or ComputeCpp.
 Refer to the respective library's documentation for installation instructions specific to your operating system.
@@ -71,32 +63,52 @@ Replace "path/to/your/mri/image.jpg" with the actual path to your MRI image file
 Ensure that the MRI image file is in grayscale format.
 Build and Execute the Code:
 
-Build the project using the appropriate build system for your code editor or IDE.
-Execute the compiled binary or run the project from the code editor.
-The code will load the MRI image, perform tumor detection using SYCL, and output the tumor confirmed matrix.
-The tumor confirmed matrix will be printed in the console.
-Analyze the Results:
+git clone https://github.com/dineshjnld/intel-oneAPI.git
+This will create a local copy of the repository on your machine.
+Set up the Environment:
 
-Examine the tumor confirmed matrix to see the detected tumor regions.
-Further analyze the results as per your requirements, such as visualizing the detected tumors or performing additional processing steps.
-Note: The instructions provided assume a basic familiarity with code editors, libraries, and command-line tools. If you encounter any issues during the execution, refer to the respective library's documentation or seek assistance from the library's support channels.
+Ensure that you have Python and the required libraries installed. You can use pip to install the dependencies listed in the requirements.txt file:
+pip install -r requirements.txt
+Set up the DPC++ development environment with the necessary tools, libraries, and compilers. Refer to the documentation of your preferred DPC++ implementation for instructions on setting up the environment.
+Prepare the Dataset:
 
-Please ensure that you have the necessary hardware and software requirements to run the code, including compatible GPUs and the required software dependencies.
+Place your brain tumor dataset in a folder of your choice. Ensure that the images are properly labeled and organized.
+Update the code to point to the correct dataset folder path.
+Run the Python Implementation:
+
+Open a command prompt or terminal.
+Navigate to the cloned repository's directory.
+Run the following command to execute the Python implementation:
+python brain_tumor_detection.py
+The Python code will load the dataset, train the model, perform brain tumor detection on a randomly selected image, and display the results.
+Compile and Run the DPC++ Implementation:
+
+Open a command prompt or terminal.
+Navigate to the cloned repository's directory.
+Compile the DPC++ code using the appropriate DPC++ compiler command. 
+dpcpp brain_tumor_detection.cpp -o brain_tumor_detection
+Run the compiled executable to execute the DPC++ implementation:
+./brain_tumor_detection
+The DPC++ code will load the dataset, perform brain tumor detection on a randomly selected image using DPC++, and display the results.
 
   
 ## What I Learned:
-   While developing the brain tumor detection prototype, the biggest learning for me was understanding and implementing the SYCL programming model using the Intel DPC++ compiler. SYCL allows for programming heterogeneous systems using C++ and provides a high-level abstraction for parallelism across CPUs, GPUs, and other accelerators.
+   From this brain tumor detection MODEL, I have  learnt several key concepts and techniques:
 
-Here are some key learnings from this experience:
+Data Loading and Preprocessing: I have understand how to load and preprocess image data using libraries like OpenCV and Pandas. This includes reading image files, resizing images, converting pixel values, and organizing data into a suitable format for training and inference.
 
-SYCL Programming Model: I gained a deeper understanding of the SYCL programming model and how it enables writing high-performance code for heterogeneous systems. SYCL's ability to express parallelism through lambda functions and range-based parallel loops provided a flexible and intuitive way to exploit the parallel capabilities of GPUs.
+Deep Learning Model Training: The code demonstrates how to train a deep learning model using the FastAI library.I have learn how to set up data loaders, define a model architecture, choose appropriate metrics, and train the model using a training loop.
 
-Integration with Libraries: I learned how to integrate SYCL with other popular libraries like Eigen and OpenCV. Leveraging Eigen for linear algebra computations and OpenCV for image processing tasks allowed me to utilize GPU acceleration through SYCL, optimizing the performance of the brain tumor detection algorithm.
+Model Inference and Prediction: The code shows how to use a trained model to perform inference on new unseen data. I have see how to load a saved model, preprocess input images, pass them through the model, and interpret the model's predictions.
 
-GPU Memory Management: Working with SYCL also taught me about managing memory on GPUs. I had to carefully allocate SYCL buffers and ensure proper data transfers between the host and device. This included using SYCL accessors to read and write data on the device and synchronizing data transfers using the SYCL queue.
+Integration with DPC++: The code showcases how to integrate DPC++ (Data Parallel C++) programming model into the brain tumor detection pipeline. I have  learnt how to leverage DPC++ to offload computationally intensive tasks to parallel processing devices, improving performance and efficiency.
 
-Performance Optimization: Through experimentation and profiling, I learned how to optimize the performance of the brain tumor detection algorithm. This involved identifying bottlenecks, parallelizing computationally intensive tasks, and leveraging the power of GPUs for faster execution.
+Benchmarking and Performance Analysis: The code incorporates benchmarking measures to evaluate the performance of the brain tumor detection system.I have understand how to calculate latency, throughput, and average latency to assess the system's efficiency and make performance comparisons.
 
-Collaboration with Intel oneAPI: The prototype's utilization of Intel oneAPI, including the DPC++ compiler and SYCL, provided valuable insights into the capabilities of Intel's development tools for heterogeneous computing. This collaboration allowed me to explore the full potential of oneAPI libraries and optimizations for improving performance.
+TensorFlow Integration: The code demonstrates the integration of a TensorFlow model into the brain tumor detection pipeline.I have  learnt how to load a pre-trained TensorFlow model and perform inference using TensorFlow's C++ API.
 
-Overall, the development of the brain tumor detection prototype using SYCL and Intel oneAPI was a challenging and rewarding experience. It expanded my knowledge of programming heterogeneous systems, GPU acceleration, and performance optimization techniques, which will be beneficial for future projects involving high-performance computing and parallel programming.
+By studying and working with this brain tumor detection model, I have gained practical experience in image classification, deep learning model training, inference using both Python and DPC++, and performance analysis. These skills can be applied to various other computer vision and machine learning projects.
+
+
+
+
