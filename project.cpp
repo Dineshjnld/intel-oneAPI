@@ -1,7 +1,5 @@
 #include <CL/sycl.hpp>
 #include <iostream>
-#include <tensorflow/core/framework/tensor.h>
-#include <tensorflow/core/public/session.h>
 #include <opencv2/opencv.hpp>
 #include <filesystem>
 #include <chrono>
@@ -12,12 +10,6 @@ namespace fs = std::filesystem;
 int main() {
     // Create a SYCL queue for DPC++ computations
     cl::sycl::queue q;
-
-// Load the TensorFlow model
-    std::string model_path = "path/to/tensorflow_model.pb";
-    tensorflow::SessionOptions session_options;
-    tensorflow::Session* session = tensorflow::NewSession(session_options);
-    tensorflow::Status status = session->Create(model_path);
     if (!status.ok()) {
      std::cerr << "Failed to load TensorFlow model: " << status.ToString() << std::endl;
         return 1;
